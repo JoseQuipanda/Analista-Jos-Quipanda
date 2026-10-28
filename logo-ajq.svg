@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720" role="img" aria-labelledby="title desc">
+<title id="title">Logótipo Analista José Quipanda</title><desc id="desc">Monograma AJQ em azul-marinho, dourado e vermelho, com símbolo de microscópio e formação, ciência e impacto.</desc>
+<defs><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5d78b"/><stop offset="1" stop-color="#bd8427"/></linearGradient></defs>
+<rect width="720" height="720" rx="48" fill="#f7fbff"/>
+<circle cx="360" cy="275" r="220" fill="#062754"/>
+<path d="M185 398 L280 160 L333 160 L425 398 L368 398 L347 339 L258 339 L236 398 Z M276 290 L330 290 L303 215 Z" fill="#fff"/>
+<path d="M390 185 C448 147 514 175 520 225 C525 270 485 292 448 305 C500 315 530 344 516 382 C500 426 438 431 386 401 L409 365 C438 383 466 378 469 357 C472 337 448 328 411 326 L390 325 L390 290 L414 290 C452 290 474 272 469 249 C465 228 438 224 416 239 Z" fill="url(#gold)"/>
+<path d="M273 378 C304 425 354 428 389 395 L414 424 C365 470 297 461 251 408 Z" fill="#d92735"/>
+<path d="M330 135 L355 102 L405 102 L427 135 L405 151 L355 151 Z" fill="#062754"/><path d="M378 102 L378 75 L432 75 L432 102" fill="#062754"/>
+<text x="360" y="530" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="48" font-weight="800" fill="#062754" letter-spacing="2">ANALISTA</text>
+<text x="360" y="584" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="43" font-weight="800" fill="#062754" letter-spacing="1">JOSÉ QUIPANDA</text>
+<path d="M150 615 H570" stroke="url(#gold)" stroke-width="4"/>
+<text x="360" y="651" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" fill="#8b641e" letter-spacing="4">FORMAÇÃO • CIÊNCIA • IMPACTO</text>
+</svg>

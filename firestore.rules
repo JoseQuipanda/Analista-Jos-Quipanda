@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+ match /databases/{database}/documents {
+  function signedIn(){return request.auth != null;}
+  function self(uid){return signedIn() && request.auth.uid == uid;}
+  function admin(){return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';}
+  match /users/{uid} {
+   allow create: if self(uid) && request.resource.data.role == 'student' && request.resource.data.email == request.auth.token.email;
+   allow read: if self(uid) || admin();
+   allow update: if admin() || (self(uid) && request.resource.data.role == resource.data.role && request.resource.data.email == resource.data.email);
+   allow delete: if admin();
+  }
+  match /courses/{id} { allow read: if resource.data.status == 'published' || admin(); allow create, update, delete: if admin(); }
+  match /enrollments/{id} {
+   allow create: if signedIn() && request.resource.data.studentId == request.auth.uid && request.resource.data.status == 'pending';
+   allow read: if (signedIn() && resource.data.studentId == request.auth.uid) || admin();
+   allow update, delete: if admin();
+  }
+  match /certificates/{code} { allow read: if (signedIn() && resource.data.studentId == request.auth.uid) || admin(); allow create, update, delete: if admin(); }
+  match /certificatePublic/{code} { allow get: if true; allow list: if false; allow create, update, delete: if admin(); }
+ }
+}

@@ -1,0 +1,9 @@
+Projeto Firebase: analista-cacf0
+Authentication domain: analista-cacf0.firebaseapp.com
+Project ID: analista-cacf0
+Storage bucket: analista-cacf0.firebasestorage.app
+Messaging Sender ID: 2630511774
+App ID: 1:2630511774:web:ec514c0be99715b71fdf8
+API key: já incluída no index.html
+
+A chave web é pública; não a trates como senha. Protege os dados através das regras do Firestore.
