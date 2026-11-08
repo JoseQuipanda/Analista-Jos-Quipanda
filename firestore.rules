@@ -8,8 +8,8 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
     function publishedCourse(courseId) {
-      return exists(/databases/$(database)/documents/courses/$(courseId))
-        && get(/databases/$(database)/documents/courses/$(courseId)).data.status == 'published';
+      return exists(/databases/$(database)/documents/publicCourses/$(courseId))
+        && get(/databases/$(database)/documents/publicCourses/$(courseId)).data.status == 'published';
     }
     function approved(courseId) {
       return signedIn()
@@ -47,11 +47,17 @@ service cloud.firestore {
       allow delete: if admin();
     }
 
-    // Public listings contain only course title/description/duration/status.
-    // Never put lesson text, video URLs, or materials in this collection.
+    // Course records and lessons are private. Public listings use a separate
+    // metadata-only projection so historic course fields can never be leaked.
     match /courses/{courseId} {
-      allow get, list: if (resource.data.status == 'published'
-        && resource.data.keys().hasOnly(['title','description','duration','status','createdBy','createdAt','updatedAt'])) || admin();
+      allow read, write: if admin();
+      allow create, update, delete: if false;
+    }
+    match /publicCourses/{courseId} {
+      // Firestore rules are not filters: the public query must constrain status
+      // to published. Exact shape is enforced on all writes; migrate only clean
+      // metadata records into this collection, never copy lesson data here.
+      allow get, list: if resource.data.status == 'published' || admin();
       allow create: if admin() && validCourseMetadata(request.resource.data)
         && request.resource.data.createdBy == request.auth.uid;
       allow update: if admin() && validCourseMetadata(request.resource.data)
