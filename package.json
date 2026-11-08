@@ -1,0 +1,8 @@
+{
+    "name": "analista-jose-quipanda-firestore-rules-tests",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {"test:rules": "node --test tests/firestore-rules.test.mjs"},
+  "devDependencies": {"@firebase/rules-unit-testing": "4.0.1", "firebase": "11.0.0"}
+}
