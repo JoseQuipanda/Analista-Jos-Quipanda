@@ -1,0 +1,27 @@
+name: Firestore Rules tests
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [correcao-portal-teste]
+permissions:
+  contents: read
+jobs:
+  firestore-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install test dependencies
+        run: npm install --no-audit --no-fund
+      - name: Configure emulator to use repository rules
+        run: |
+          printf '{"firestore":{"rules":"firestore.rules"},"emulators":{"firestore":{"port":8080},"ui":{"enabled":false}}}\n' > firebase.json
+      - name: Run Firestore Rules Emulator tests (demo project only)
+        run: npx --yes firebase-tools@latest emulators:exec --only firestore --project demo-analista-rules-test "npm run test:rules"

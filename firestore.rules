@@ -1,0 +1,132 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function own(uid) { return signedIn() && request.auth.uid == uid; }
+    function admin() {
+      return signedIn()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    function publishedCourse(courseId) {
+      return exists(/databases/$(database)/documents/publicCourses/$(courseId))
+        && get(/databases/$(database)/documents/publicCourses/$(courseId)).data.status == 'published';
+    }
+    function approved(courseId) {
+      return signedIn()
+        && exists(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + courseId))
+        && get(/databases/$(database)/documents/enrollments/$(request.auth.uid + '_' + courseId)).data.status == 'approved';
+    }
+    function validCourseMetadata(d) {
+      return d.keys().hasOnly(['title','description','duration','status','createdBy','createdAt','updatedAt'])
+        && d.keys().hasAll(['title','description','duration','status','createdAt','updatedAt'])
+        && d.title is string && d.title.size() > 0 && d.title.size() <= 140
+        && d.description is string && d.description.size() <= 1800
+        && d.duration is string && d.duration.size() <= 80
+        && d.status in ['draft','published'];
+    }
+    function validProfile(uid) {
+      return request.resource.data.keys().hasOnly(['name','email','role','createdAt'])
+        && request.resource.data.keys().hasAll(['name','email','role','createdAt'])
+        && request.resource.data.name is string && request.resource.data.name.size() <= 140
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.role == 'student';
+    }
+
+    // Self-service account creation is restricted to student role. Role elevation
+    // must be performed by an administrator using Firebase Admin SDK (server-side).
+    match /users/{uid} {
+      allow read: if own(uid) || admin();
+      allow create: if own(uid) && validProfile(uid);
+      // Self-service profile repair/name updates are safe only while retaining
+      // the student role and token email. This also makes concurrent signup
+      // profile writes idempotent; admin remains the only role escalator.
+      allow update: if admin() || (own(uid) && validProfile(uid)
+        && resource.data.role == 'student'
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.email == resource.data.email);
+      allow delete: if admin();
+    }
+
+    // Course records and lessons are private. Public listings use a separate
+    // metadata-only projection so historic course fields can never be leaked.
+    match /courses/{courseId} {
+      allow read, write: if admin();
+      allow create, update, delete: if false;
+    }
+    match /publicCourses/{courseId} {
+      // Firestore rules are not filters: the public query must constrain status
+      // to published. Exact shape is enforced on all writes; migrate only clean
+      // metadata records into this collection, never copy lesson data here.
+      allow get, list: if resource.data.status == 'published' || admin();
+      allow create: if admin() && validCourseMetadata(request.resource.data)
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update: if admin() && validCourseMetadata(request.resource.data)
+        && request.resource.data.createdBy == resource.data.createdBy;
+      allow delete: if admin();
+    }
+
+    // Private lesson content. Approved students can read only their approved
+    // course; admins can manage. Authorization is enforced by Firestore, not UI.
+    match /courseLessons/{courseId} {
+      allow get: if admin() || (publishedCourse(courseId) && approved(courseId));
+      allow list: if false;
+      allow create, update, delete: if admin();
+    }
+
+    // A student may create a pending enrollment only for their own identity and
+    // a currently published course; they cannot approve or edit it afterward.
+    match /enrollments/{enrollmentId} {
+      allow get: if admin() || (signedIn() && (enrollmentId.matches('^' + request.auth.uid + '_.*') || resource.data.studentId == request.auth.uid));
+      allow list: if admin();
+      allow create: if signedIn()
+        && request.resource.data.keys().hasOnly(['studentId','studentEmail','studentName','courseId','status','createdAt'])
+        && request.resource.data.keys().hasAll(['studentId','studentEmail','studentName','courseId','status','createdAt'])
+        && enrollmentId == request.auth.uid + '_' + request.resource.data.courseId
+        && request.resource.data.studentId == request.auth.uid
+        && request.resource.data.studentEmail == request.auth.token.email
+        && request.resource.data.studentName is string && request.resource.data.studentName.size() <= 140
+        && request.resource.data.courseId is string
+        && request.resource.data.status == 'pending'
+        && publishedCourse(request.resource.data.courseId);
+      allow update: if admin()
+        && request.resource.data.studentId == resource.data.studentId
+        && request.resource.data.courseId == resource.data.courseId
+        && request.resource.data.status in ['pending','approved','rejected'];
+      allow delete: if admin();
+    }
+
+    // Dynamic public editorial content is readable only when published.
+    match /contents/{contentId} {
+      allow get, list: if resource.data.status == 'published' || admin();
+      allow create: if admin()
+        && request.resource.data.keys().hasOnly(['title','category','summary','sourceUrl','imageUrl','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.keys().hasAll(['title','category','summary','sourceUrl','imageUrl','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 150
+        && request.resource.data.summary is string && request.resource.data.summary.size() <= 1200
+        && request.resource.data.category in ['articles','education','news','gallery']
+        && request.resource.data.status in ['published','draft']
+        && request.resource.data.createdBy == request.auth.uid;
+      allow update: if admin()
+        && request.resource.data.keys().hasOnly(['title','category','summary','sourceUrl','imageUrl','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.keys().hasAll(['title','category','summary','sourceUrl','imageUrl','status','createdBy','createdAt','updatedAt'])
+        && request.resource.data.title is string && request.resource.data.title.size() > 0 && request.resource.data.title.size() <= 150
+        && request.resource.data.summary is string && request.resource.data.summary.size() <= 1200
+        && request.resource.data.category in ['articles','education','news','gallery']
+        && request.resource.data.status in ['published','draft']
+        && request.resource.data.createdBy == resource.data.createdBy;
+      allow delete: if admin();
+    }
+
+    match /certificates/{code} {
+      allow read, write: if admin();
+    }
+    match /certificatePublic/{code} {
+      allow get: if true;
+      allow list: if false;
+      allow create, update, delete: if admin();
+    }
+
+    // Explicit deny-by-default for anything not named above.
+    match /{document=**} { allow read, write: if false; }
+  }
+}
