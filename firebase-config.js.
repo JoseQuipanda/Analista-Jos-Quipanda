@@ -7,3 +7,6 @@ export const firebaseConfig = {
   messagingSenderId: "2630511774",
   appId: "1:2630511774:web:ec514c0be99715b71fdf8"
 };
+
+export const WORKER_URL = "https://ajq-storage-qpi.josequipanda70.workers.dev";
+
