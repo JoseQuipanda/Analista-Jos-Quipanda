@@ -1,0 +1,9 @@
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyBqiexDkpe7hIiI23pYg6L6DhPl2L6sPT0",
+  authDomain: "analista-cacf0.firebaseapp.com",
+  projectId: "analista-cacf0",
+  storageBucket: "analista-cacf0.firebasestorage.app",
+  messagingSenderId: "2630511774",
+  appId: "1:2630511774:web:ec514c0be99715b71fdf8"
+};
