@@ -1,0 +1,16 @@
+<!doctype html><html lang="pt"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Perfil</title><link rel="stylesheet" href="style.css"></head><body>
+<nav><h1>O meu perfil</h1><a href="estudante.html">← Voltar</a></nav>
+<div class="card"><input id="nome" placeholder="Nome completo"><input id="telefone" placeholder="Telefone (+244...)"><input id="email" disabled>
+<input id="escola" placeholder="Escola / Instituição"><input id="curso" placeholder="Curso"><input id="ano" placeholder="Ano curricular"><input id="turma" placeholder="Turma">
+<select id="turno"><option value="">Turno</option><option>Manhã</option><option>Tarde</option><option>Noite</option></select>
+<select id="provincia"><option value="">Província</option></select>
+<button id="save">Guardar</button><button id="out" style="background:#b00020">Terminar sessão</button><p id="msg"></p></div>
+<script type="module">
+import {auth,db,guard,doc,getDoc,setDoc,signOut,serverTimestamp} from "./app.js";
+const $=i=>document.getElementById(i),F=["nome","telefone","escola","curso","ano","turma","turno","provincia"];
+["Bengo","Benguela","Bié","Cabinda","Cuando","Cubango","Cuanza Norte","Cuanza Sul","Cunene","Huambo","Huíla","Icolo e Bengo","Luanda","Lunda Norte","Lunda Sul","Malanje","Moxico","Moxico Leste","Namibe","Uíge","Zaire"].forEach(p=>$("provincia").add(new Option(p,p)));
+guard("student",async u=>{const r=doc(db,"users",u.uid),d=(await getDoc(r)).data()||{};$("email").value=u.email;F.forEach(k=>$(k).value=d[k]||"");
+ $("save").onclick=async()=>{const o={updatedAt:serverTimestamp()};F.forEach(k=>o[k]=$(k).value.trim());
+  try{await setDoc(r,o,{merge:true});$("msg").style.color="#0b6b4a";$("msg").textContent="Guardado ✓"}catch(e){$("msg").style.color="#b00020";$("msg").textContent=e.code}};
+ $("out").onclick=()=>confirm("Terminar sessão?")&&signOut(auth);});
+</script></body></html>
