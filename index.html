@@ -66,7 +66,66 @@
 .topic,.platform-card,.course-item,.news-card,.resource-card{transition:transform .2s ease,box-shadow .2s ease}
 .topic:hover,.platform-card:hover,.course-item:hover,.news-card:hover,.resource-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(8,44,92,.12)}
 @media(max-width:760px){.hero{background-position:58% center}.hero:after{background:linear-gradient(90deg,rgba(3,27,59,.84),rgba(5,45,91,.48))}}
-\n</style>
+\n
+/* Identidade visual laboratorial — revisão complementar */
+:root{
+ --navy:#082b52;--blue:#0868b5;--cyan:#10a6c8;--red:#c72d3c;
+ --ink:#142d46;--muted:#5d7184;--pale:#f2f7fa;--line:#d8e3eb;
+ --lab-glass:rgba(255,255,255,.12)
+}
+body{background:#f4f8fb;color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif}
+.topbar{background:#061f3b;border-bottom:2px solid #16a5c5;letter-spacing:.015em}
+.navbar{border-bottom:1px solid #d9e5ed;box-shadow:0 5px 20px rgba(5,35,64,.08)}
+.brandmark{border-radius:10px;background:linear-gradient(145deg,#0a477b,#082b52);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.brand span em{letter-spacing:.16em;color:#087da9}
+.navlinks a{position:relative;transition:color .18s ease}
+.navlinks a:after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:2px;background:#12a5c5;transition:right .18s ease}
+.navlinks a:hover:after,.navlinks a:focus-visible:after{right:0}
+.hero{border-bottom:4px solid #12a5c5;background-color:#082b52}
+.hero:after{background:
+ linear-gradient(90deg,rgba(3,24,45,.96) 0%,rgba(5,43,78,.82) 47%,rgba(5,43,78,.25) 100%),
+ repeating-linear-gradient(0deg,transparent 0 39px,rgba(255,255,255,.035) 40px),
+ repeating-linear-gradient(90deg,transparent 0 39px,rgba(255,255,255,.035) 40px)}
+.hero .eyebrow{color:#b9eaf4;font-size:12px;letter-spacing:.14em}
+.hero .line{background:#18b5cb}
+.hero h1{letter-spacing:-.035em}
+.hero h1 span{color:#35c0d2}
+.hero h2{font-weight:650;color:#f1f8fc}
+.hero p{max-width:690px;color:#e2eef6}
+.hero .quote{padding:20px 18px;border:1px solid rgba(178,231,242,.34);border-radius:14px;background:rgba(4,29,53,.48);backdrop-filter:blur(8px);box-shadow:0 16px 45px rgba(0,0,0,.16);font-size:18px}
+.hero .quote strong{color:#39c0d1}
+.btn,.bluebtn,.topic button,.platform-card button,.course-action{border-radius:7px}
+.btn.red{background:#c72d3c;border-color:#c72d3c}
+.btn.ghost{border-color:rgba(225,242,250,.65);background:rgba(5,35,64,.48)}
+.pillars{border-bottom:1px solid #d5e3eb}
+.pillar{align-items:flex-start}
+.pillar .icon{border-radius:12px;background:#e5f3f7;color:#087b9b}
+.pillar h3{color:#123653}
+.section h2,.panel h2{color:#0a3559;letter-spacing:-.02em}
+.section h2:after{content:"";display:block;width:54px;height:3px;margin-top:10px;border-radius:2px;background:#13a5c2}
+.section:nth-of-type(even){background:linear-gradient(135deg,#f0f6f9,#eaf2f6)}
+.panel,.topic,.platform-card,.course-item,.news-card,.resource-card,.published-card,.admin-box,.contactbox{
+ border-color:#d8e4eb;border-radius:10px;box-shadow:0 5px 18px rgba(7,43,74,.055)
+}
+.topic:hover,.platform-card:hover,.course-item:hover,.news-card:hover,.resource-card:hover{box-shadow:0 12px 26px rgba(7,43,74,.10)}
+.resource-type,.news-card .date{color:#087f9f}
+.more,.resource-card a,.published-card a,.news-card a{color:#08699f}
+.resource-card a{background:#e8f4f7;border:1px solid #d4e9ee}
+.tag{background:#0a719b}
+.admin-workspace{background:linear-gradient(145deg,#f4f9fb,#eaf2f6);border-color:#cbdde7}
+.admin-panel{border:1px solid #cbdde7}
+.publisher-fab{background:#08699f;border-radius:8px}
+.publisher-dialog{border:1px solid #d7e4eb;border-radius:12px}
+input:focus,textarea:focus,select:focus{outline:2px solid rgba(16,166,200,.28);border-color:#159bb7}
+.footer{background:#061f3b;border-top:3px solid #0d8eae}
+.newsletter{background:linear-gradient(105deg,#082b52,#07557c)}
+@media(max-width:760px){
+ .navlinks{border-top:2px solid #12a5c5}
+ .hero{background-position:58% center}
+ .hero .quote{display:none}
+}
+
+</style>
 
 <style>
 .module-editor{border:1px solid #d8e3ef;border-radius:12px;padding:14px;margin:14px 0;background:#f7faff}.module-card{border:1px solid #d8e3ef;border-radius:10px;padding:12px;margin:10px 0;background:#fff}.lesson-card{border-left:3px solid #4b79a8;padding:10px;margin:10px 0;background:#f8fbff}.module-card input,.module-card textarea,.lesson-card input,.lesson-card textarea{width:100%;margin:5px 0 10px}.module-actions,.lesson-actions{display:flex;gap:8px;flex-wrap:wrap}.course-module{margin:16px 0;padding:14px;border:1px solid #dbe5ef;border-radius:12px}.course-lesson{padding:12px;margin:10px 0;background:#f6f9fc;border-radius:10px}.course-lesson-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;margin:12px 0}.gallery-admin-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.ai-conversation{max-height:360px;overflow:auto;padding:10px;background:#f5f8fc;border-radius:10px;margin:12px 0}.ai-message{white-space:pre-wrap;padding:10px;border-radius:9px;margin:8px 0}.ai-user{background:#e5eef9}.ai-bot{background:#fff;border:1px solid #dbe5ef}.ai-card textarea{width:100%;min-height:85px}.ai-card button,.module-editor button{margin:5px 5px 5px 0}
@@ -115,7 +174,7 @@
 <section class="admin-box"><h4>Inscrições recebidas</h4><div id="adminEnrollments" class="admin-hint">A carregar inscrições…</div></section>
 <section class="admin-box"><h4>Emitir certificado</h4><form id="certificateForm"><label for="certStudent">Nome completo do formando</label><input id="certStudent" required maxlength="140" placeholder="Nome conforme documento de identificação"><label for="certCourse">Curso concluído</label><select id="certCourse" required><option value="">Seleccione um curso</option></select><label for="certDate">Data de conclusão</label><input id="certDate" type="date" required><label for="certIssuer">Entidade emissora</label><input id="certIssuer" required maxlength="140" value="Analista José Quipanda"><button type="submit">Emitir e preparar certificado</button></form><p id="certificateMessage" class="admin-hint" aria-live="polite"></p></section>
 <section class="admin-box"><h4>Certificados emitidos</h4><div id="adminCertificates" class="admin-hint">Os certificados emitidos aparecerão aqui.</div></section>
-<section class="admin-box"><h4>Publicação e conteúdos</h4><p class="admin-hint">Use o botão flutuante “Publicar conteúdo” para criar artigos, materiais educativos, notícias e actividades. Para a Galeria, cole o endereço público da imagem. Os rascunhos permanecem privados.</p><button type="button" id="openPublisherFromAdmin">Abrir editor de conteúdos</button></section>
+<section class="admin-box"><h4>Publicação e conteúdos</h4><p class="admin-hint">Use o botão flutuante “Publicar conteúdo” para criar artigos, materiais educativos, notícias e actividades. Para a Galeria, cole o endereço público da imagem. Os rascunhos permanecem privados e podem ser geridos abaixo.</p><button type="button" id="openPublisherFromAdmin">Abrir editor de conteúdos</button><div id="adminContents" class="admin-hint" aria-live="polite">A carregar conteúdos…</div></section>
 </div></div></div></div></section>
 <section class="section" id="certificados"><h2>Verificação de Certificados</h2><p class="section-intro">Cada certificado emitido terá um código único. A verificação pública confirmará apenas os dados mínimos necessários para validar a autenticidade.</p><div class="platform-card" style="max-width:620px"><form id="verifyForm"><label for="verifyCode">Código de verificação</label><input id="verifyCode" required placeholder="Ex.: AQ-XXXXXXXX" maxlength="40"><button type="submit">Verificar certificado</button></form><div id="verifyResult" class="firebase-status" aria-live="polite"></div></div></section>
 <section class="section" id="contactos"><h2>Contactos</h2><p class="section-intro">Para parcerias, colaborações, palestras e conteúdos de educação para a saúde, entra em contacto através dos canais abaixo.</p><div class="contactbox"><p><strong>Analista José Quipanda</strong></p><p>⚕ Ciência, Vigilância &amp; Saúde Pública</p><p>☎ Telefone: <a class="more" href="tel:+244944055093">+244 944 055 093</a></p><p>✉ E-mail: <a class="more" href="mailto:josequipanda70@gmail.com">josequipanda70@gmail.com</a></p><p>f Facebook: <a class="more" href="https://www.facebook.com/share/1R7EpV1PVJ/?mibextid=wwXIfr" target="_blank" rel="noopener">Analista José Quipanda</a></p><p>▶ YouTube: <a class="more" href="https://www.youtube.com/@analistajos%C3%A9quipanda" target="_blank" rel="noopener">Analista José Quipanda</a></p><p>♪ TikTok: <a class="more" href="https://www.tiktok.com/@analistajosequipanda" target="_blank" rel="noopener">Analista José Quipanda</a></p><p class="small">Os nomes das redes estão indicados, mas os links apontam para as páginas iniciais das plataformas. Para abrir diretamente os teus perfis, precisamos dos URLs específicos de cada conta.</p></div></section>
@@ -197,7 +256,7 @@ function addPublishedCard(target,item,id){
  const body=document.createElement('p');body.textContent=item.summary||'';
  const when=item.createdAt&&item.createdAt.toDate?item.createdAt.toDate():null;const dateEl=document.createElement('span');dateEl.className='date';dateEl.textContent=when?fmtWhen(when):'';card.append(tag,dateEl,title,body);
  if(item.sourceUrl){try{const u=new URL(item.sourceUrl);if(['http:','https:'].includes(u.protocol)){const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent=target==='gallery'?'Abrir imagem / actividade ↗':'Consultar fonte / documento ↗';card.append(a)}}catch(_){}}
- if(role==='admin'){const actions=document.createElement('div');actions.className='gallery-admin-actions';const edit=document.createElement('button');edit.type='button';edit.textContent='Editar';edit.onclick=async()=>{const title=prompt('Título:',item.title||'');if(title===null)return;const summary=prompt('Descrição:',item.summary||'');if(summary===null)return;try{await updateDoc(doc(db,'contents',id),{title:title.trim(),summary:summary.trim(),updatedAt:serverTimestamp()});await loadPublishedContents()}catch(e){alert('Não foi possível editar este conteúdo. Verifique as permissões do Firestore.')}};const del=document.createElement('button');del.type='button';del.className='danger';del.textContent='Eliminar';del.onclick=async()=>{if(!confirm('Eliminar esta publicação?'))return;try{await deleteDoc(doc(db,'contents',id));await loadPublishedContents()}catch(e){alert('Não foi possível eliminar. Verifique as permissões do Firestore.')}};actions.append(edit,del);card.append(actions)}
+ if(role==='admin'){const actions=document.createElement('div');actions.className='gallery-admin-actions';const edit=document.createElement('button');edit.type='button';edit.textContent='Editar';edit.onclick=async()=>{const title=prompt('Título:',item.title||'');if(title===null)return;const summary=prompt('Descrição:',item.summary||'');if(summary===null)return;try{await updateDoc(doc(db,'contents',id),{title:title.trim(),summary:summary.trim(),updatedAt:serverTimestamp()});await loadPublishedContents();await loadAdminContents()}catch(e){alert('Não foi possível editar este conteúdo. Verifique as permissões do Firestore.')}};const del=document.createElement('button');del.type='button';del.className='danger';del.textContent='Eliminar';del.onclick=async()=>{if(!confirm('Eliminar esta publicação?'))return;try{await deleteDoc(doc(db,'contents',id));await loadPublishedContents();await loadAdminContents()}catch(e){alert('Não foi possível eliminar. Verifique as permissões do Firestore.')}};actions.append(edit,del);card.append(actions)}
  document.getElementById(contentTargets[target]).append(card);
 }
 const NEWS_TTL=48*3600*1000;
@@ -215,7 +274,7 @@ el('contentForm').addEventListener('submit',async e=>{
   let imageUrl=el('contentImage').value.trim();const file=el('contentImageFile').files?.[0];
   if(file){if(!file.type.startsWith('image/')){status('contentMessage','Seleccione um ficheiro de imagem válido.');return}if(file.size>5*1024*1024){status('contentMessage','A imagem ultrapassa o limite de 5 MB.');return}status('contentMessage','A carregar imagem para a galeria…');const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');const uploaded=await uploadBytes(storageRef(storage,`gallery/${user.uid}/${Date.now()}-${safeName}`),file,{contentType:file.type});imageUrl=await getDownloadURL(uploaded.ref)}
   const payload={title:el('contentTitle').value.trim(),category:el('contentCategory').value,summary:el('contentSummary').value.trim(),sourceUrl:el('contentSource').value.trim(),imageUrl,status:el('contentStatus').value,createdBy:user.uid,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};
-  await addDoc(collection(db,'contents'),payload);status('contentMessage',payload.status==='published'?'Conteúdo publicado.':'Rascunho guardado.');el('contentForm').reset();if(payload.status==='published')await loadPublishedContents();
+  await addDoc(collection(db,'contents'),payload);status('contentMessage',payload.status==='published'?'Conteúdo publicado.':'Rascunho guardado.');el('contentForm').reset();if(payload.status==='published')await loadPublishedContents();await loadAdminContents();
  }catch(err){status('contentMessage','Não foi possível publicar. Confirme as regras das colecções contents e do Firebase Storage.');console.error(err)}
 });
 
@@ -235,6 +294,28 @@ function openCourseLesson(c){
  if(modules.length){html=modules.map((m,mi)=>'<section class="course-module"><h3>'+escapeHTML(m.title||('Módulo '+(mi+1)))+'</h3>'+m.lessons.map((l,li)=>'<article class="course-lesson"><h4>'+escapeHTML(l.title||('Aula '+(li+1)))+'</h4>'+lessonMarkup(l)+'</article>').join('')+'</section>').join('');}
  else {html=lessonMarkup({title:c.lessonTitle,text:c.lessonText,videoUrl:c.videoUrl,materialUrl:c.materialUrl});}
  document.getElementById('modalTag').textContent='Sala de aula online';document.getElementById('modalTitle').textContent=c.title||'Curso';document.getElementById('modalBody').innerHTML=html;modal.classList.add('open');document.body.style.overflow='hidden';document.getElementById('modalClose').focus();
+}
+async function loadAdminContents(){
+ if(role!=='admin'||!user)return;
+ const box=el('adminContents');if(!box)return;
+ box.textContent='A carregar conteúdos…';
+ try{
+  const snap=await getDocs(collection(db,'contents'));
+  if(snap.empty){box.textContent='Ainda não existem conteúdos publicados ou rascunhos.';return}
+  box.innerHTML='';
+  const categories={articles:'Artigo',education:'Educação',news:'Notícia',gallery:'Galeria'};
+  [...snap.docs].sort((a,b)=>(b.data().createdAt?.seconds||0)-(a.data().createdAt?.seconds||0)).forEach(d=>{
+   const item=d.data(),row=document.createElement('div');row.className='admin-row';
+   const info=document.createElement('div');info.textContent=(item.title||'Conteúdo sem título')+' · '+(categories[item.category]||item.category||'Conteúdo')+' · '+(item.status==='published'?'Publicado':'Rascunho');
+   const toggle=document.createElement('button');toggle.type='button';toggle.textContent=item.status==='published'?'Guardar como rascunho':'Publicar';
+   toggle.onclick=async()=>{toggle.disabled=true;try{await updateDoc(doc(db,'contents',d.id),{status:item.status==='published'?'draft':'published',updatedAt:serverTimestamp()});await loadAdminContents();await loadPublishedContents()}catch(e){toggle.disabled=false;status('adminMessage',friendly(e))}};
+   const edit=document.createElement('button');edit.type='button';edit.textContent='Editar título/resumo';
+   edit.onclick=async()=>{const title=prompt('Título:',item.title||'');if(title===null)return;const summary=prompt('Resumo:',item.summary||'');if(summary===null)return;try{await updateDoc(doc(db,'contents',d.id),{title:title.trim(),summary:summary.trim(),updatedAt:serverTimestamp()});await loadAdminContents();await loadPublishedContents()}catch(e){status('adminMessage',friendly(e))}};
+   const del=document.createElement('button');del.type='button';del.className='danger';del.textContent='Eliminar';
+   del.onclick=async()=>{if(!confirm('Eliminar definitivamente este conteúdo?'))return;del.disabled=true;try{await deleteDoc(doc(db,'contents',d.id));await loadAdminContents();await loadPublishedContents()}catch(e){del.disabled=false;status('adminMessage',friendly(e))}};
+   row.append(info,toggle,edit,del);box.append(row);
+  });
+ }catch(e){box.textContent='Não foi possível carregar os conteúdos. Confirme as permissões de leitura da colecção contents para o administrador.';console.warn('Falha na gestão de conteúdos:',e)}
 }
 async function loadCourses(){
  try{
@@ -280,7 +361,7 @@ function printCertificate(c){const w=window.open('','_blank','width=1000,height=
 el('certificateForm').addEventListener('submit',async e=>{e.preventDefault();if(role!=='admin'||!user){status('certificateMessage','A emissão está reservada à administração.');return}const courseId=el('certCourse').value;if(!courseId){status('certificateMessage','Seleccione o curso concluído.');return}try{const course=await getDoc(doc(db,'courses',courseId));if(!course.exists()){status('certificateMessage','O curso seleccionado já não existe.');return}const code='AQ-'+Array.from(crypto.getRandomValues(new Uint8Array(5))).map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();const cert={studentName:el('certStudent').value.trim(),courseId,courseTitle:course.data().title,completionDate:el('certDate').value,issuer:el('certIssuer').value.trim(),code,status:'valid',issuedBy:user.uid,issuedAt:serverTimestamp()};await setDoc(doc(db,'certificates',code),cert);await setDoc(doc(db,'certificatePublic',code),{studentName:cert.studentName,courseTitle:cert.courseTitle,completionDate:cert.completionDate,issuer:cert.issuer,code,status:'valid'});status('certificateMessage',`Certificado ${code} emitido e registado. A preparar impressão…`);printCertificate(cert);el('certificateForm').reset();el('certIssuer').value='Analista José Quipanda';await loadCertificateAdmin()}catch(err){console.error(err);status('certificateMessage','Não foi possível emitir. Confirme as regras do Firestore para certificates e certificatePublic.')}});
 el('openPublisherFromAdmin').addEventListener('click',()=>publisherOverlay.classList.add('open'));
 el('quickNews').addEventListener('click',()=>{el('contentCategory').value='news';publisherOverlay.classList.add('open')});
-onAuthStateChanged(auth,async u=>{user=u;el('accountPanel').classList.toggle('hidden',!u);el('navAdmin').classList.add('hidden');el('adminPanel').classList.add('hidden');el('adminWorkspace').classList.add('hidden');if(!u){role='guest';publisherFab.classList.remove('visible');await loadPublishedContents();await loadCourses();return}el('accountLabel').textContent=u.displayName||u.email;try{const p=await getDoc(doc(db,'users',u.uid));role=p.exists()?(p.data().role||'student'):'student';el('accountRole').textContent=role==='admin'?'Administrador — use o menu “Administração”':'Estudante';if(role==='admin'){el('navAdmin').classList.remove('hidden');el('adminPanel').classList.remove('hidden');el('adminWorkspace').classList.remove('hidden');publisherFab.classList.add('visible');await loadAdminCourses();await loadAdminEnrollments();await loadCertificateAdmin()}else{publisherFab.classList.remove('visible')}await loadPublishedContents();await loadCourses()}catch(e){status('authMessage','Não foi possível carregar os dados do perfil neste momento. Contacte a administração da plataforma.')} });
+onAuthStateChanged(auth,async u=>{user=u;el('accountPanel').classList.toggle('hidden',!u);el('navAdmin').classList.add('hidden');el('adminPanel').classList.add('hidden');el('adminWorkspace').classList.add('hidden');if(!u){role='guest';publisherFab.classList.remove('visible');await loadPublishedContents();await loadCourses();return}el('accountLabel').textContent=u.displayName||u.email;try{const p=await getDoc(doc(db,'users',u.uid));role=p.exists()?(p.data().role||'student'):'student';el('accountRole').textContent=role==='admin'?'Administrador — use o menu “Administração”':'Estudante';if(role==='admin'){el('navAdmin').classList.remove('hidden');el('adminPanel').classList.remove('hidden');el('adminWorkspace').classList.remove('hidden');publisherFab.classList.add('visible');await loadAdminCourses();await loadAdminEnrollments();await loadCertificateAdmin();await loadAdminContents()}else{publisherFab.classList.remove('visible')}await loadPublishedContents();await loadCourses()}catch(e){status('authMessage','Não foi possível carregar os dados do perfil neste momento. Contacte a administração da plataforma.')} });
 el('verifyForm').addEventListener('submit',async e=>{e.preventDefault();const code=el('verifyCode').value.trim().toUpperCase();try{const s=await getDoc(doc(db,'certificatePublic',code));if(!s.exists()||s.data().status!=='valid'){status('verifyResult','Certificado não encontrado ou inválido.');return}const c=s.data();status('verifyResult',`CERTIFICADO VÁLIDO — ${c.studentName} — ${c.courseTitle} — Emitido por ${c.issuer} — Código ${c.code}`)}catch(e){status('verifyResult','Não foi possível concluir a verificação neste momento. Tente novamente mais tarde.')}});
 async function loadAutoNews(){const box=el('newsAuto');if(!box)return;try{const r=await fetch('/api/noticias',{cache:'no-store'});if(!r.ok)throw new Error('http '+r.status);const data=await r.json();const items=(data.items||[]).map(i=>({...i,when:new Date(i.date)})).filter(i=>!isNaN(i.when)&&isFresh(i.when)).slice(0,6);box.innerHTML='';if(!items.length){box.innerHTML='<article class="news-card"><h3>Sem novas notícias nas últimas 48 horas</h3><p>As notícias antigas saem automaticamente. Consulte as fontes oficiais abaixo.</p></article>';return}items.forEach(i=>{const c=document.createElement('article');c.className='news-card';const d=document.createElement('span');d.className='date';d.textContent=fmtWhen(i.when)+(i.source?' · '+i.source:'');const h=document.createElement('h3');h.textContent=i.title;c.append(d,h);try{const u=new URL(i.link);if(u.protocol==='https:'||u.protocol==='http:'){const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent='Ler a notícia ↗';c.append(a)}}catch(_){}box.append(c)})}catch(e){box.innerHTML='<article class="news-card"><h3>Notícias temporariamente indisponíveis</h3><p>Consulte as fontes oficiais abaixo. O site tenta novamente automaticamente.</p></article>'}}
 loadAutoNews();setInterval(()=>{loadAutoNews();loadPublishedContents()},30*60*1000);
