@@ -66,7 +66,66 @@
 .topic,.platform-card,.course-item,.news-card,.resource-card{transition:transform .2s ease,box-shadow .2s ease}
 .topic:hover,.platform-card:hover,.course-item:hover,.news-card:hover,.resource-card:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(8,44,92,.12)}
 @media(max-width:760px){.hero{background-position:58% center}.hero:after{background:linear-gradient(90deg,rgba(3,27,59,.84),rgba(5,45,91,.48))}}
-\n</style>
+\n
+/* Identidade visual laboratorial — revisão complementar */
+:root{
+ --navy:#082b52;--blue:#0868b5;--cyan:#10a6c8;--red:#c72d3c;
+ --ink:#142d46;--muted:#5d7184;--pale:#f2f7fa;--line:#d8e3eb;
+ --lab-glass:rgba(255,255,255,.12)
+}
+body{background:#f4f8fb;color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif}
+.topbar{background:#061f3b;border-bottom:2px solid #16a5c5;letter-spacing:.015em}
+.navbar{border-bottom:1px solid #d9e5ed;box-shadow:0 5px 20px rgba(5,35,64,.08)}
+.brandmark{border-radius:10px;background:linear-gradient(145deg,#0a477b,#082b52);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.brand span em{letter-spacing:.16em;color:#087da9}
+.navlinks a{position:relative;transition:color .18s ease}
+.navlinks a:after{content:"";position:absolute;left:0;right:100%;bottom:-7px;height:2px;background:#12a5c5;transition:right .18s ease}
+.navlinks a:hover:after,.navlinks a:focus-visible:after{right:0}
+.hero{border-bottom:4px solid #12a5c5;background-color:#082b52}
+.hero:after{background:
+ linear-gradient(90deg,rgba(3,24,45,.96) 0%,rgba(5,43,78,.82) 47%,rgba(5,43,78,.25) 100%),
+ repeating-linear-gradient(0deg,transparent 0 39px,rgba(255,255,255,.035) 40px),
+ repeating-linear-gradient(90deg,transparent 0 39px,rgba(255,255,255,.035) 40px)}
+.hero .eyebrow{color:#b9eaf4;font-size:12px;letter-spacing:.14em}
+.hero .line{background:#18b5cb}
+.hero h1{letter-spacing:-.035em}
+.hero h1 span{color:#35c0d2}
+.hero h2{font-weight:650;color:#f1f8fc}
+.hero p{max-width:690px;color:#e2eef6}
+.hero .quote{padding:20px 18px;border:1px solid rgba(178,231,242,.34);border-radius:14px;background:rgba(4,29,53,.48);backdrop-filter:blur(8px);box-shadow:0 16px 45px rgba(0,0,0,.16);font-size:18px}
+.hero .quote strong{color:#39c0d1}
+.btn,.bluebtn,.topic button,.platform-card button,.course-action{border-radius:7px}
+.btn.red{background:#c72d3c;border-color:#c72d3c}
+.btn.ghost{border-color:rgba(225,242,250,.65);background:rgba(5,35,64,.48)}
+.pillars{border-bottom:1px solid #d5e3eb}
+.pillar{align-items:flex-start}
+.pillar .icon{border-radius:12px;background:#e5f3f7;color:#087b9b}
+.pillar h3{color:#123653}
+.section h2,.panel h2{color:#0a3559;letter-spacing:-.02em}
+.section h2:after{content:"";display:block;width:54px;height:3px;margin-top:10px;border-radius:2px;background:#13a5c2}
+.section:nth-of-type(even){background:linear-gradient(135deg,#f0f6f9,#eaf2f6)}
+.panel,.topic,.platform-card,.course-item,.news-card,.resource-card,.published-card,.admin-box,.contactbox{
+ border-color:#d8e4eb;border-radius:10px;box-shadow:0 5px 18px rgba(7,43,74,.055)
+}
+.topic:hover,.platform-card:hover,.course-item:hover,.news-card:hover,.resource-card:hover{box-shadow:0 12px 26px rgba(7,43,74,.10)}
+.resource-type,.news-card .date{color:#087f9f}
+.more,.resource-card a,.published-card a,.news-card a{color:#08699f}
+.resource-card a{background:#e8f4f7;border:1px solid #d4e9ee}
+.tag{background:#0a719b}
+.admin-workspace{background:linear-gradient(145deg,#f4f9fb,#eaf2f6);border-color:#cbdde7}
+.admin-panel{border:1px solid #cbdde7}
+.publisher-fab{background:#08699f;border-radius:8px}
+.publisher-dialog{border:1px solid #d7e4eb;border-radius:12px}
+input:focus,textarea:focus,select:focus{outline:2px solid rgba(16,166,200,.28);border-color:#159bb7}
+.footer{background:#061f3b;border-top:3px solid #0d8eae}
+.newsletter{background:linear-gradient(105deg,#082b52,#07557c)}
+@media(max-width:760px){
+ .navlinks{border-top:2px solid #12a5c5}
+ .hero{background-position:58% center}
+ .hero .quote{display:none}
+}
+
+</style>
 
 <style>
 .module-editor{border:1px solid #d8e3ef;border-radius:12px;padding:14px;margin:14px 0;background:#f7faff}.module-card{border:1px solid #d8e3ef;border-radius:10px;padding:12px;margin:10px 0;background:#fff}.lesson-card{border-left:3px solid #4b79a8;padding:10px;margin:10px 0;background:#f8fbff}.module-card input,.module-card textarea,.lesson-card input,.lesson-card textarea{width:100%;margin:5px 0 10px}.module-actions,.lesson-actions{display:flex;gap:8px;flex-wrap:wrap}.course-module{margin:16px 0;padding:14px;border:1px solid #dbe5ef;border-radius:12px}.course-lesson{padding:12px;margin:10px 0;background:#f6f9fc;border-radius:10px}.course-lesson-frame{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;margin:12px 0}.gallery-admin-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.ai-conversation{max-height:360px;overflow:auto;padding:10px;background:#f5f8fc;border-radius:10px;margin:12px 0}.ai-message{white-space:pre-wrap;padding:10px;border-radius:9px;margin:8px 0}.ai-user{background:#e5eef9}.ai-bot{background:#fff;border:1px solid #dbe5ef}.ai-card textarea{width:100%;min-height:85px}.ai-card button,.module-editor button{margin:5px 5px 5px 0}
