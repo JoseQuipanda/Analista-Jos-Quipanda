@@ -279,6 +279,30 @@ el('contentForm').addEventListener('submit',async e=>{
 });
 
 const friendly=e=>({'auth/invalid-credential':'Não foi possível validar os dados de acesso. Verifique o e-mail e a palavra-passe.','auth/email-already-in-use':'Este e-mail já possui uma conta.','auth/weak-password':'Escolha uma palavra-passe mais segura.','auth/operation-not-allowed':'O registo por e-mail ainda não está ativado no Firebase (Authentication > Sign-in method).','auth/unauthorized-domain':'Este endereço do site ainda não está autorizado no Firebase (Authentication > Settings > Authorized domains).','auth/invalid-email':'O e-mail não é válido.','auth/network-request-failed':'Sem ligação à internet. Tente novamente.','permission-denied':'Não foi possível concluir esta operação. Contacte a administração da plataforma.'}[e.code]||'Não foi possível concluir a operação neste momento. Tente novamente mais tarde. ('+(e.code||e.message)+')');
+async function ensureStudentProfile(authUser,preferredName=''){
+ const profileRef=doc(db,'users',authUser.uid);
+ let snapshot=await getDoc(profileRef);
+ if(snapshot.exists()){
+  const existing=snapshot.data();
+  const safeName=(preferredName||authUser.displayName||'').trim();
+  if(safeName&&existing.role==='student'&&existing.name!==safeName){
+   await setDoc(profileRef,{name:safeName},{merge:true});
+   return {...existing,name:safeName};
+  }
+  return existing;
+ }
+ const profile={name:(preferredName||authUser.displayName||authUser.email||'Estudante').trim(),email:authUser.email,role:'student',createdAt:serverTimestamp()};
+ try{await setDoc(profileRef,profile)}
+ catch(writeError){
+  // Outra aba/dispositivo pode ter criado o perfil em simultâneo.
+  const retry=await getDoc(profileRef);
+  if(retry.exists())return retry.data();
+  throw writeError;
+ }
+ const verified=await getDoc(profileRef);
+ if(!verified.exists())throw new Error('profile-not-created');
+ return verified.data();
+}
 const escapeHTML=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function safeHttpUrl(value){try{const u=new URL(value);return ['http:','https:'].includes(u.protocol)?u.href:''}catch(_){return ''}}
 function youtubeEmbed(value){const u=safeHttpUrl(value);if(!u)return '';try{const x=new URL(u);let id='';if(x.hostname.includes('youtu.be'))id=x.pathname.slice(1);else if(x.hostname.includes('youtube.com'))id=x.searchParams.get('v')||x.pathname.split('/').filter(Boolean).pop();return id&&/^[A-Za-z0-9_-]{6,}$/.test(id)?'https://www.youtube-nocookie.com/embed/'+id:''}catch(_){return ''}}
@@ -342,8 +366,8 @@ async function loadCourses(){
  }catch(e){status('courseStatus','Não foi possível carregar os cursos. Verifique a ligação e as permissões do Firebase.');console.warn(e)}
 }
 async function enroll(courseId){if(!user){status('authMessage','Entra ou cria uma conta antes de pedir inscrição.');document.getElementById('plataforma').scrollIntoView();return}try{const old=await getDocs(query(collection(db,'enrollments'),where('studentId','==',user.uid),where('courseId','==',courseId)));if(!old.empty){status('authMessage','Já pediste inscrição neste curso.');return}await addDoc(collection(db,'enrollments'),{studentId:user.uid,studentEmail:user.email,studentName:user.displayName||user.email,courseId,status:'pending',createdAt:serverTimestamp()});status('authMessage','Pedido de inscrição registado.')}catch(e){status('authMessage',friendly(e))}}
-el('loginForm').addEventListener('submit',async e=>{e.preventDefault();try{await signInWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);status('authMessage','Sessão iniciada.')}catch(x){status('authMessage',friendly(x))}});
-el('signupBtn').onclick=async()=>{const name=el('authName').value.trim();if(!name){status('authMessage','Escreve o teu nome completo no primeiro campo.');return}if(!el('authEmail').value.trim()||el('authPassword').value.length<6){status('authMessage','Preenche o e-mail e uma palavra-passe com pelo menos 6 caracteres.');return}status('authMessage','A criar a conta…');try{const cred=await createUserWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);await updateProfile(cred.user,{displayName:name});await setDoc(doc(db,'users',cred.user.uid),{name,email:cred.user.email,role:'student',createdAt:serverTimestamp()});status('authMessage','Conta de estudante criada.')}catch(e){status('authMessage',friendly(e))}};
+el('loginForm').addEventListener('submit',async e=>{e.preventDefault();const submit=e.currentTarget.querySelector('button[type="submit"]');submit.disabled=true;status('authMessage','Credenciais recebidas. A validar o perfil e a preparar o acesso…');try{await signInWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);status('authMessage','Autenticação concluída. A carregar a tua área…')}catch(x){status('authMessage',friendly(x))}finally{submit.disabled=false}});
+el('signupBtn').onclick=async()=>{const name=el('authName').value.trim();if(!name){status('authMessage','Escreve o teu nome completo no primeiro campo.');return}if(!el('authEmail').value.trim()||el('authPassword').value.length<6){status('authMessage','Preenche o e-mail e uma palavra-passe com pelo menos 6 caracteres.');return}status('authMessage','A criar a conta e o perfil de estudante…');el('signupBtn').disabled=true;try{const cred=await createUserWithEmailAndPassword(auth,el('authEmail').value.trim(),el('authPassword').value);await updateProfile(cred.user,{displayName:name});await ensureStudentProfile(cred.user,name);status('authMessage','Conta criada com sucesso. A preparar a tua área de estudante…')}catch(e){status('authMessage',friendly(e));console.error('Falha no registo/perfil:',e)}finally{el('signupBtn').disabled=false}};
 el('resetBtn').onclick=async()=>{const email=el('authEmail').value.trim();if(!email){status('authMessage','Escreve primeiro o teu e-mail.');return}try{await sendPasswordResetEmail(auth,email);status('authMessage','Se a conta existir, receberás instruções por e-mail.')}catch(e){status('authMessage',friendly(e))}};
 el('logoutBtn').onclick=()=>signOut(auth);
 let editingCourseId=null;
@@ -361,7 +385,36 @@ function printCertificate(c){const w=window.open('','_blank','width=1000,height=
 el('certificateForm').addEventListener('submit',async e=>{e.preventDefault();if(role!=='admin'||!user){status('certificateMessage','A emissão está reservada à administração.');return}const courseId=el('certCourse').value;if(!courseId){status('certificateMessage','Seleccione o curso concluído.');return}try{const course=await getDoc(doc(db,'courses',courseId));if(!course.exists()){status('certificateMessage','O curso seleccionado já não existe.');return}const code='AQ-'+Array.from(crypto.getRandomValues(new Uint8Array(5))).map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();const cert={studentName:el('certStudent').value.trim(),courseId,courseTitle:course.data().title,completionDate:el('certDate').value,issuer:el('certIssuer').value.trim(),code,status:'valid',issuedBy:user.uid,issuedAt:serverTimestamp()};await setDoc(doc(db,'certificates',code),cert);await setDoc(doc(db,'certificatePublic',code),{studentName:cert.studentName,courseTitle:cert.courseTitle,completionDate:cert.completionDate,issuer:cert.issuer,code,status:'valid'});status('certificateMessage',`Certificado ${code} emitido e registado. A preparar impressão…`);printCertificate(cert);el('certificateForm').reset();el('certIssuer').value='Analista José Quipanda';await loadCertificateAdmin()}catch(err){console.error(err);status('certificateMessage','Não foi possível emitir. Confirme as regras do Firestore para certificates e certificatePublic.')}});
 el('openPublisherFromAdmin').addEventListener('click',()=>publisherOverlay.classList.add('open'));
 el('quickNews').addEventListener('click',()=>{el('contentCategory').value='news';publisherOverlay.classList.add('open')});
-onAuthStateChanged(auth,async u=>{user=u;el('accountPanel').classList.toggle('hidden',!u);el('navAdmin').classList.add('hidden');el('adminPanel').classList.add('hidden');el('adminWorkspace').classList.add('hidden');if(!u){role='guest';publisherFab.classList.remove('visible');await loadPublishedContents();await loadCourses();return}el('accountLabel').textContent=u.displayName||u.email;try{const p=await getDoc(doc(db,'users',u.uid));role=p.exists()?(p.data().role||'student'):'student';el('accountRole').textContent=role==='admin'?'Administrador — use o menu “Administração”':'Estudante';if(role==='admin'){el('navAdmin').classList.remove('hidden');el('adminPanel').classList.remove('hidden');el('adminWorkspace').classList.remove('hidden');publisherFab.classList.add('visible');await loadAdminCourses();await loadAdminEnrollments();await loadCertificateAdmin();await loadAdminContents()}else{publisherFab.classList.remove('visible')}await loadPublishedContents();await loadCourses()}catch(e){status('authMessage','Não foi possível carregar os dados do perfil neste momento. Contacte a administração da plataforma.')} });
+onAuthStateChanged(auth,async u=>{
+ user=u;
+ el('accountPanel').classList.toggle('hidden',!u);
+ el('navAdmin').classList.add('hidden');
+ el('adminPanel').classList.add('hidden');
+ el('adminWorkspace').classList.add('hidden');
+ if(!u){
+  role='guest';publisherFab.classList.remove('visible');
+  await loadPublishedContents();await loadCourses();return;
+ }
+ el('accountLabel').textContent=u.displayName||u.email;
+ status('authMessage','A validar o perfil da conta…');
+ try{
+  const profile=await ensureStudentProfile(u);
+  role=profile.role==='admin'?'admin':'student';
+  el('accountRole').textContent=role==='admin'?'Administrador — acesso de gestão':'Estudante — área de aprendizagem';
+ }catch(profileError){
+  role='guest';
+  status('authMessage','A autenticação foi aceite, mas não foi possível ler ou criar o perfil no Firestore. Código: '+(profileError.code||profileError.message||'erro desconhecido')+'.');
+  console.error('Falha ao validar/criar perfil do utilizador:',profileError);
+  return;
+ }
+ if(role==='admin'){
+  el('navAdmin').classList.remove('hidden');el('adminPanel').classList.remove('hidden');el('adminWorkspace').classList.remove('hidden');publisherFab.classList.add('visible');
+  try{await loadAdminCourses();await loadAdminEnrollments();await loadCertificateAdmin();await loadAdminContents()}
+  catch(adminError){status('adminMessage','Perfil administrativo validado, mas houve uma falha ao carregar os módulos de gestão: '+(adminError.code||adminError.message||'erro desconhecido'));console.error('Falha nos módulos administrativos:',adminError)}
+ }else{publisherFab.classList.remove('visible')}
+ await loadPublishedContents();await loadCourses();
+ status('authMessage',role==='admin'?'Acesso administrativo validado.':'Acesso de estudante validado.');
+});
 el('verifyForm').addEventListener('submit',async e=>{e.preventDefault();const code=el('verifyCode').value.trim().toUpperCase();try{const s=await getDoc(doc(db,'certificatePublic',code));if(!s.exists()||s.data().status!=='valid'){status('verifyResult','Certificado não encontrado ou inválido.');return}const c=s.data();status('verifyResult',`CERTIFICADO VÁLIDO — ${c.studentName} — ${c.courseTitle} — Emitido por ${c.issuer} — Código ${c.code}`)}catch(e){status('verifyResult','Não foi possível concluir a verificação neste momento. Tente novamente mais tarde.')}});
 async function loadAutoNews(){const box=el('newsAuto');if(!box)return;try{const r=await fetch('/api/noticias',{cache:'no-store'});if(!r.ok)throw new Error('http '+r.status);const data=await r.json();const items=(data.items||[]).map(i=>({...i,when:new Date(i.date)})).filter(i=>!isNaN(i.when)&&isFresh(i.when)).slice(0,6);box.innerHTML='';if(!items.length){box.innerHTML='<article class="news-card"><h3>Sem novas notícias nas últimas 48 horas</h3><p>As notícias antigas saem automaticamente. Consulte as fontes oficiais abaixo.</p></article>';return}items.forEach(i=>{const c=document.createElement('article');c.className='news-card';const d=document.createElement('span');d.className='date';d.textContent=fmtWhen(i.when)+(i.source?' · '+i.source:'');const h=document.createElement('h3');h.textContent=i.title;c.append(d,h);try{const u=new URL(i.link);if(u.protocol==='https:'||u.protocol==='http:'){const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener';a.textContent='Ler a notícia ↗';c.append(a)}}catch(_){}box.append(c)})}catch(e){box.innerHTML='<article class="news-card"><h3>Notícias temporariamente indisponíveis</h3><p>Consulte as fontes oficiais abaixo. O site tenta novamente automaticamente.</p></article>'}}
 loadAutoNews();setInterval(()=>{loadAutoNews();loadPublishedContents()},30*60*1000);
